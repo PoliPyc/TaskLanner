@@ -6,12 +6,14 @@ class TicTacToe():
         self.turn = 0
         self.playerXwins = 0
         self.playerOwins = 0
+        self.draws = 0
         self.playerTurn = ""
 
+    #deprecated
     def _placeSign(self, sign, x, y):
         try:
             if sign.upper() != self.cross and sign.upper() != self.circle:
-                raise BaseException("Inavlid sign placed")
+                raise BaseException("Invalid sign placed")
         except BaseException:
             print("Invalid sign")
 
@@ -20,7 +22,15 @@ class TicTacToe():
     def placeSign(self, x, y):
         x = int(x) - 1
         y = int(y) - 1
-        if self.board[y][x] != " ":
+
+        try:
+            if x < 0 or x > 2 or y < 0 or y > 2:
+                raise BaseException("offset")
+
+            if self.board[y][x] != " ":
+                raise BaseException("already placed")
+        except BaseException:
+            print("invalid coordinates\n put again:")
             return 1
 
         self.board[y][x] = self.playerTurn
@@ -53,17 +63,27 @@ class TicTacToe():
         self.board = [[" "] * 3 for i in range(3)]
 
     def printASCIIgame(self):
-        score = "Player X    {} - {}    Player O"
-        boardRow = "         [{}] [{}] [{}]"
+        score = "Player X    {} - {} - {}    Player O"
+        columns = "            1   2   3 "
+        boardRow = "         {} [{}] [{}] [{}]"
 
-        print(score.format(self.playerXwins, self.playerOwins))
-        print(boardRow.format(self.board[0][0], self.board[0][1], self.board[0][2]))
-        print(boardRow.format(self.board[1][0], self.board[1][1], self.board[1][2]))
-        print(boardRow.format(self.board[2][0], self.board[2][1], self.board[2][2]))
+        print(score.format(self.playerXwins, self.draws, self.playerOwins))
+        print(columns)
+        print(boardRow.format(1, self.board[0][0], self.board[0][1], self.board[0][2]))
+        print(boardRow.format(2, self.board[1][0], self.board[1][1], self.board[1][2]))
+        print(boardRow.format(3, self.board[2][0], self.board[2][1], self.board[2][2]))
+
+    def clearScreen(self):
+        print("\r\r\r\r\n\n\n\n\r\r\r\r")
 
 game = TicTacToe()
 while True:
     game.printASCIIgame()
-    while game.countTurn():
-        pass
-    game.placeSign(input(), input())
+    game.countTurn()
+    valid = False
+    while valid == False:
+        if game.placeSign(input(), input()) == 0:
+            valid = True
+    if game.turn > 4:
+        game.checkGame()
+    game.clearScreen()
