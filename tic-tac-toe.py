@@ -37,49 +37,63 @@ class TicTacToe():
         return 0
 
     def countTurn(self):
-        self.turn =+ 1
+        self.turn += 1
         if not self.playerTurn or self.playerTurn == self.circle:
             self.playerTurn = self.cross
         else:
             self.playerTurn = self.circle
 
     def checkGame(self):
-        if (self.board[0][0] == self.board[1][0] == self.board[2][0] or
-            self.board[0][1] == self.board[1][1] == self.board[2][1] or
-            self.board[0][2] == self.board[1][2] == self.board[2][2] or
-            self.board[0][0] == self.board[0][1] == self.board[0][2] or
-            self.board[1][0] == self.board[1][1] == self.board[1][2] or
-            self.board[2][0] == self.board[2][1] == self.board[2][2] or
-            self.board[0][0] == self.board[1][1] == self.board[2][2] or
-            self.board[0][2] == self.board[1][1] == self.board[2][0]):
-                self.endGame()
+        if (self.board[0][0] != " " and self.board[0][0] == self.board[1][0] == self.board[2][0] or
+            self.board[0][1] != " " and self.board[0][1] == self.board[1][1] == self.board[2][1] or
+            self.board[0][2] != " " and self.board[0][2] == self.board[1][2] == self.board[2][2] or
+            self.board[0][0] != " " and self.board[0][0] == self.board[0][1] == self.board[0][2] or
+            self.board[1][0] != " " and self.board[1][0] == self.board[1][1] == self.board[1][2] or
+            self.board[2][0] != " " and self.board[2][0] == self.board[2][1] == self.board[2][2] or
+            self.board[0][0] != " " and self.board[0][0] == self.board[1][1] == self.board[2][2] or
+            self.board[0][2] != " " and self.board[0][2] == self.board[1][1] == self.board[2][0]):
+                self.endGame(self.playerTurn)
 
-    def endGame(self):
-        if self.playerTurn == self.cross:
+        if self.turn >= 9:
+            self.endGame("draw")
+
+    def endGame(self, winner):
+        if winner == self.cross:
             self.playerXwins += 1
-        else:
+        elif winner == self.circle:
             self.playerOwins += 1
-        self.turn = 0
+        else:
+            self.draws += 1
+
         self.board = [[" "] * 3 for i in range(3)]
+        self.turn = 0
+        self.playerTurn = ""
+
+        if winner == "draw":
+            print("It's draw!")
+        else:
+            print("Player{} wins!".format(winner))
 
     def printASCIIgame(self):
         score = "Player X    {} - {} - {}    Player O"
         columns = "            1   2   3 "
         boardRow = "         {} [{}] [{}] [{}]"
+        turns = "            Turn {}"
 
         print(score.format(self.playerXwins, self.draws, self.playerOwins))
         print(columns)
         print(boardRow.format(1, self.board[0][0], self.board[0][1], self.board[0][2]))
         print(boardRow.format(2, self.board[1][0], self.board[1][1], self.board[1][2]))
         print(boardRow.format(3, self.board[2][0], self.board[2][1], self.board[2][2]))
+        print(turns.format(self.turn))
 
     def clearScreen(self):
         print("\r\r\r\r\n\n\n\n\r\r\r\r")
 
 game = TicTacToe()
 while True:
-    game.printASCIIgame()
     game.countTurn()
+    game.printASCIIgame()
     valid = False
     while valid == False:
         if game.placeSign(input(), input()) == 0:
