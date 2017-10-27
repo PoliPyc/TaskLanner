@@ -8,14 +8,23 @@ class TicTacToe():
         self.playerOwins = 0
         self.playerTurn = ""
 
-    def placeSign(self, sign, x, y):
+    def _placeSign(self, sign, x, y):
         try:
-            if sign != self.cross and sign != self.circle:
+            if sign.upper() != self.cross and sign.upper() != self.circle:
                 raise BaseException("Inavlid sign placed")
         except BaseException:
             print("Invalid sign")
 
         self.board[y][x] = sign
+
+    def placeSign(self, x, y):
+        x = int(x) - 1
+        y = int(y) - 1
+        if self.board[y][x] != " ":
+            return 1
+
+        self.board[y][x] = self.playerTurn
+        return 0
 
     def countTurn(self):
         self.turn =+ 1
@@ -44,12 +53,17 @@ class TicTacToe():
         self.board = [[" "] * 3 for i in range(3)]
 
     def printASCIIgame(self):
-        score = "Player X    "+self.playerXwins+" - "+self.playerOwins+"    Player O"
-        boardFirstRow = "["+self.board[0][0]+"] ["+self.board[0][1]+"] ["+self.board[0][2]+"]"
-        boardSecondRow = "["+self.board[1][0]+"] ["+self.board[1][1]+"] ["+self.board[1][2]+"]"
-        boardThirdRow = "["+self.board[2][0]+"] ["+self.board[2][1]+"] ["+self.board[2][2]+"]"
+        score = "Player X    {} - {}    Player O"
+        boardRow = "         [{}] [{}] [{}]"
 
-        print(score+"\n\n\n"+boardFirstRow+"\n"+boardSecondRow+"\n"+boardThirdRow)
+        print(score.format(self.playerXwins, self.playerOwins))
+        print(boardRow.format(self.board[0][0], self.board[0][1], self.board[0][2]))
+        print(boardRow.format(self.board[1][0], self.board[1][1], self.board[1][2]))
+        print(boardRow.format(self.board[2][0], self.board[2][1], self.board[2][2]))
 
 game = TicTacToe()
-game.printASCIIgame()
+while True:
+    game.printASCIIgame()
+    while game.countTurn():
+        pass
+    game.placeSign(input(), input())
