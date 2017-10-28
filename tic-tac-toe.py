@@ -1,3 +1,4 @@
+import sys
 class TicTacToe():
     def __init__(self):
         self.board = [[" "]* 3 for i in range(3)]
@@ -104,5 +105,23 @@ class TicTacToe():
             if game.turn > 4:
                 game.checkGame()
 
+    def netGame(self):
+        pass
+
+    def menu(self):
+        print("""
+Select mode:
+1 - local game
+2 - net game (not implemented yet)
+        """)
+
+        print("game mode: ", end="")
+        x = input()
+
+        return {
+            '1' : self.localGame(),
+            '2' : self.netGame()
+        }.get(x, sys.exit(0))
+
 game = TicTacToe()
-game.localGame()
+game.menu()
