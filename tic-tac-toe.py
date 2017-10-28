@@ -1,4 +1,5 @@
 import sys
+from multiplayer import *
 class TicTacToe():
     def __init__(self):
         self.board = [[" "]* 3 for i in range(3)]
@@ -40,6 +41,8 @@ class TicTacToe():
 
     def countTurn(self):
         self.turn += 1
+
+    def changePlayer(self):
         if not self.playerTurn or self.playerTurn == self.circle:
             self.playerTurn = self.cross
         else:
@@ -96,19 +99,33 @@ class TicTacToe():
     def localGame(self):
         self.gameEnded = 0
         while not self.gameEnded:
-            game.countTurn()
-            game.printASCIIgame()
+            self.countTurn()
+            self.changePlayer()
+            self.printASCIIgame()
             valid = False
             while valid == False:
-                if game.placeSign(input(), input()) == 0:
+                if self.placeSign(input(), input()) == 0:
                     valid = True
-            if game.turn > 4:
-                game.checkGame()
+            if self.turn > 4:
+                self.checkGame()
 
     def netGame(self):
+        self.multiplayer = Multiplayer()
+        self.multiplayer.setNetGame()
+        self.netMenu()
+
+    def createGame(self):
+        pass
+
+    def joinGame(self):
         pass
 
     def menu(self):
+        menu = {
+            '1': self.localGame,
+            '2': self.netGame
+        }
+
         print("""
 Select mode:
 1 - local game
@@ -118,10 +135,24 @@ Select mode:
         print("game mode: ", end="")
         x = input()
 
-        return {
-            '1' : self.localGame(),
-            '2' : self.netGame()
-        }.get(x, sys.exit(0))
+        menu[x]()
+
+    def netMenu(self):
+        menu = {
+            '1': self.createGame,
+            '2': self.joinGame
+        }
+
+        print("""
+Create or join game?
+1 - create game
+2 - join game
+        """)
+
+        print("choose: ", end="")
+        x = input()
+
+        menu[x]()
 
 game = TicTacToe()
 game.menu()

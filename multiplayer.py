@@ -18,6 +18,12 @@ class Multiplayer():
     def setOpponentPort(self, port):
         self.opponentPort = port
 
+    def setNetGame(self):
+        print("type opponent ip: ", end="")
+        self.setOpponentIp(input())
+        print("type opponent port: ", end="")
+        self.setOpponentPort(int(input()))
+
     def sendPlace(self, x, y):
         coordinates = (x,y)
 
