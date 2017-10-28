@@ -109,6 +109,9 @@ class TicTacToe():
             if self.turn > 4:
                 self.checkGame()
 
+        self.retryMenu()
+
+
     def netGame(self):
         self.multiplayer = Multiplayer()
         self.multiplayer.setNetGame()
@@ -133,6 +136,18 @@ Select mode:
         """)
 
         print("game mode: ", end="")
+        x = input()
+
+        menu[x]()
+
+    def retryMenu(self):
+        menu = {
+            't': self.localGame,
+            'y': self.localGame,
+            'n': sys.exit
+        }
+
+        print("Try again? [y/n]: ", end="")
         x = input()
 
         menu[x]()
