@@ -1,37 +1,17 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
-import threading
-import time
+import socket
 
-exitFlag = 0
 
-class myThread(threading.Thread):
-    def __init__(self, threadID, name, counter):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.counter = counter
+TCP_IP = '127.0.0.1'
+TCP_PORT = 5005
+BUFFER_SIZE = 1024
+MESSAGE = "Hello, World!"
 
-    def run(self):
-        print("start " + self.name)
-        print_time(self.name, self.counter, 5)
-        print("ends " + self.name)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((TCP_IP, TCP_PORT))
+s.send(MESSAGE.encode())
+data = s.recv(BUFFER_SIZE)
+s.close()
 
-def print_time(threadName, delay, counter):
-        while counter:
-            if exitFlag:
-                threadName.exit()
-            time.sleep(delay)
-            print("%s: %s" % (threadName, time.ctime(time.time())))
-            counter -= 1
-
-# Create new threads
-thread1 = myThread(1, "Calculate", 1)
-thread2 = myThread(2, "Search", 2)
-
-# Start new Threads
-thread1.start()
-thread2.start()
-thread1.join()
-thread2.join()
-print ("Exiting Main Thread")
+print ("received data: {}".format(data))

@@ -8,6 +8,7 @@ class TicTacToe():
         self.playerOwins = 0
         self.draws = 0
         self.playerTurn = ""
+        self.gameEnded = 0
 
     #deprecated
     def _placeSign(self, sign, x, y):
@@ -68,6 +69,7 @@ class TicTacToe():
         self.board = [[" "] * 3 for i in range(3)]
         self.turn = 0
         self.playerTurn = ""
+        self.gameEnded = 1
 
         if winner == "draw":
             print("It's draw!")
@@ -90,14 +92,17 @@ class TicTacToe():
     def clearScreen(self):
         print("\r\r\r\r\n\n\n\n\r\r\r\r")
 
+    def localGame(self):
+        self.gameEnded = 0
+        while not self.gameEnded:
+            game.countTurn()
+            game.printASCIIgame()
+            valid = False
+            while valid == False:
+                if game.placeSign(input(), input()) == 0:
+                    valid = True
+            if game.turn > 4:
+                game.checkGame()
+
 game = TicTacToe()
-while True:
-    game.countTurn()
-    game.printASCIIgame()
-    valid = False
-    while valid == False:
-        if game.placeSign(input(), input()) == 0:
-            valid = True
-    if game.turn > 4:
-        game.checkGame()
-    game.clearScreen()
+game.localGame()
