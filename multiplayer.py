@@ -7,45 +7,43 @@ class Multiplayer():
         self.opponentIp = ""
         self.opponentPort = 0
         self.buffer = 1024
+        self.socket = ""
+        self.connection = ""
 
     #need to find a proper way
     def getMyIp(self):
-        pass
+        return socket.gethostname()
 
     def setOpponentIp(self, ip):
         self.opponentIp = ip
 
-    def setOpponentPort(self, port):
+    def setOpponentPort(self, port = 6006):
         self.opponentPort = port
 
     def setNetGame(self):
         print("type opponent ip: ", end="")
         self.setOpponentIp(input())
-        print("type opponent port: ", end="")
+        print("type opponent port [default = 6006]: ", end="")
         self.setOpponentPort(int(input()))
+
+    def createServer(self):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.bind((self.myIp, 6006))
+        self.socket.listen(1)
+
+    def joinServer(self):
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connection.connect((self.opponentIp, self.opponentPort))
+
+    def getConnection(self):
+        self.connection, addr = self.socket.accept()
+
 
     def sendPlace(self, x, y):
         coordinates = (x,y)
-
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((self.opponentIp, self.opponentPort))
-        s.send(coordinates)
-        data = s.recv(self.buffer)
-        s.close()
+        self.connection.send(coordinates)
 
     def receivePlace(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind((self.opponentIp, self.opponentPort))
-        s.listen(1)
-
-        conn, addr = s.accept()
-        print('Connection address: {}'.format(addr))
-        while True:
-            data = conn.recv(self.buffer)
-            if not data: break
-            print("received data: {}".format(data))
-
-        conn.close()
-        s.close()
+        return self.connection.recv(self.buffer)
 
 
