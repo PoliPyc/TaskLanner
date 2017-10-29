@@ -24,7 +24,7 @@ class Multiplayer():
         print("type opponent ip: ", end="")
         self.setOpponentIp(input())
         print("type opponent port [default = 6006]: ", end="")
-        self.setOpponentPort(int(input()))
+        self.setOpponentPort(int(input() or 6006))
 
     def createServer(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,7 +35,7 @@ class Multiplayer():
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connection.connect((self.opponentIp, self.opponentPort))
 
-    def getConnection(self):
+    def setConnection(self):
         self.connection, addr = self.socket.accept()
 
 
@@ -44,6 +44,9 @@ class Multiplayer():
         self.connection.send(coordinates)
 
     def receivePlace(self):
-        return self.connection.recv(self.buffer)
+        while True:
+            coordinates = self.connection.recv(self.buffer)
+            if not coordinates: break
+            return coordinates
 
 

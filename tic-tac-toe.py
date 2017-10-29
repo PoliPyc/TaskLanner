@@ -114,14 +114,33 @@ class TicTacToe():
 
     def netGame(self):
         self.multiplayer = Multiplayer()
-        self.multiplayer.setNetGame()
         self.netMenu()
 
+        self.gameEnded = 0
+        while not self.gameEnded:
+            self.multiplayer.receivePlace()
+            self.countTurn()
+            self.changePlayer()
+            self.printASCIIgame()
+
+            if(self.playerTurn == "X"): #for now that's the player that created game
+                valid = False
+                while valid == False:
+                    if self.multiplayer.sendPlace(input(), input()) == 0:
+                        valid = True
+
+            if self.turn > 4:
+                self.checkGame()
+
+        self.retryMenu()
+
     def createGame(self):
-        pass
+        self.multiplayer.createServer()
+        self.multiplayer.setConnection()
 
     def joinGame(self):
-        pass
+        self.multiplayer.setNetGame()
+        self.multiplayer.joinServer()
 
     def menu(self):
         menu = {
