@@ -118,7 +118,7 @@ class TicTacToe():
 
         self.gameEnded = 0
         while not self.gameEnded:
-            self.multiplayer.receivePlace()
+            self.multiplayer.receiveData()
             self.countTurn()
             self.changePlayer()
             self.printASCIIgame()
@@ -126,7 +126,7 @@ class TicTacToe():
             if(self.playerTurn == "X"): #for now that's the player that created game
                 valid = False
                 while valid == False:
-                    if self.multiplayer.sendPlace(input(), input()) == 0:
+                    if self.multiplayer.sendData((input(), input())) == 0:
                         valid = True
 
             if self.turn > 4:

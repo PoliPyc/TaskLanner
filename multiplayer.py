@@ -39,14 +39,13 @@ class Multiplayer():
         self.connection, addr = self.socket.accept()
 
 
-    def sendPlace(self, x, y):
-        coordinates = (x,y)
-        self.connection.send(coordinates)
+    def sendData(self, data):
+        self.connection.send(data)
 
-    def receivePlace(self):
+    def receiveData(self):
         while True:
-            coordinates = self.connection.recv(self.buffer)
-            if not coordinates: break
-            return coordinates
+            data = self.connection.recv(self.buffer)
+            if not data: break
+            return data
 
 
