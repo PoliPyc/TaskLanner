@@ -133,16 +133,17 @@ class TicTacToe():
 
         self.gameEnded = 0
         while not self.gameEnded:
-            self.multiplayer.receiveData()
+
             self.countTurn()
             self.changePlayer()
             self.printASCIIgame()
 
-            if(self.playerTurn == "X"): #for now that's the player that created game
+            if(self.playerTurn == self.multiplayer.myID): #for now that's the player that created game
                 valid = False
                 while valid == False:
                     if self.multiplayer.sendData((input(), input())) == 0:
                         valid = True
+            else: self.multiplayer.receiveData()
 
             if self.turn > 4:
                 self.checkGame()
@@ -150,10 +151,12 @@ class TicTacToe():
         self.retryMenu()
 
     def createGame(self):
+        self.multiplayer.setMyID(self.cross)
         self.multiplayer.createServer()
         self.multiplayer.setConnection()
 
     def joinGame(self):
+        self.multiplayer.setMyID(self.circle)
         self.multiplayer.setNetGame()
         self.multiplayer.joinServer()
 
