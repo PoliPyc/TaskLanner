@@ -1,5 +1,6 @@
-import sys
+import sys, copy
 from multiplayer import *
+
 class TicTacToe():
     def __init__(self):
         self.board = [[" "]* 3 for i in range(3)]
@@ -70,6 +71,9 @@ class TicTacToe():
         else:
             self.draws += 1
 
+        self.clearScreen()
+        self.printASCIIgame()
+
         self.board = [[" "] * 3 for i in range(3)]
         self.turn = 0
         self.playerTurn = ""
@@ -81,24 +85,34 @@ class TicTacToe():
             print("Player{} wins!".format(winner))
 
     def printASCIIgame(self):
-        score = "Player X    {} - {} - {}    Player O"
+        score = '\033[34m'+"Player X    {}" + '\033[0m' + " - {} - " + '\033[31m' + "{}    Player O" + '\033[0m'
         columns = "            1   2   3 "
         boardRow = "         {} [{}] [{}] [{}]"
         turns = "            Turn {}"
 
+        marks = [[" "]* 3 for i in range(3)]
+        for x in range(3):
+            for y in range(3):
+                if self.board[x][y] == self.cross:
+                    marks[x][y] = '\033[34m'+self.cross+'\033[0m'
+                elif self.board[x][y] == self.circle:
+                    marks[x][y] = '\033[31m'+self.circle+'\033[0m'
+
+
         print(score.format(self.playerXwins, self.draws, self.playerOwins))
         print(columns)
-        print(boardRow.format(1, self.board[0][0], self.board[0][1], self.board[0][2]))
-        print(boardRow.format(2, self.board[1][0], self.board[1][1], self.board[1][2]))
-        print(boardRow.format(3, self.board[2][0], self.board[2][1], self.board[2][2]))
+        print(boardRow.format(1, marks[0][0], marks[0][1], marks[0][2]))
+        print(boardRow.format(2, marks[1][0], marks[1][1], marks[1][2]))
+        print(boardRow.format(3, marks[2][0], marks[2][1], marks[2][2]))
         print(turns.format(self.turn))
 
     def clearScreen(self):
-        print("\r\r\r\r\n\n\n\n\r\r\r\r")
+        print("\033c")
 
     def localGame(self):
         self.gameEnded = 0
         while not self.gameEnded:
+            self.clearScreen()
             self.countTurn()
             self.changePlayer()
             self.printASCIIgame()
