@@ -1,5 +1,5 @@
 import socket
-
+import pickle
 # import netifaces
 
 class Multiplayer():
@@ -51,10 +51,11 @@ class Multiplayer():
         print("connected")
 
     def sendData(self, data):
+        data = pickle.dumps(data)
         self.connection.send(data)
 
     def receiveData(self):
         while True:
             data = self.connection.recv(self.buffer)
             if not data: break
-            return data
+            return pickle.loads(data)
