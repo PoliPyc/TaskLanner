@@ -1,5 +1,7 @@
 import socket
-#import netifaces
+
+
+# import netifaces
 
 class Multiplayer():
     def __init__(self):
@@ -10,14 +12,14 @@ class Multiplayer():
         self.socket = ""
         self.connection = ""
 
-    #need to find a proper way
+    # need to find a proper way
     def getMyIp(self):
         return socket.gethostname()
 
     def setOpponentIp(self, ip):
         self.opponentIp = ip
 
-    def setOpponentPort(self, port = 6006):
+    def setOpponentPort(self, port=6006):
         self.opponentPort = port
 
     def setNetGame(self):
@@ -38,7 +40,6 @@ class Multiplayer():
     def setConnection(self):
         self.connection, addr = self.socket.accept()
 
-
     def sendData(self, data):
         self.connection.send(data)
 
@@ -47,5 +48,3 @@ class Multiplayer():
             data = self.connection.recv(self.buffer)
             if not data: break
             return data
-
-

@@ -1,5 +1,6 @@
-import sys, copy
-from multiplayer import *
+import sys
+sys.path.append('..')
+from multiplayer import Multiplayer
 
 class TicTacToe():
     def __init__(self):
@@ -58,10 +59,10 @@ class TicTacToe():
             self.board[2][0] != " " and self.board[2][0] == self.board[2][1] == self.board[2][2] or
             self.board[0][0] != " " and self.board[0][0] == self.board[1][1] == self.board[2][2] or
             self.board[0][2] != " " and self.board[0][2] == self.board[1][1] == self.board[2][0]):
-                self.endGame(self.playerTurn)
+                return self.endGame(self.playerTurn)
 
         if self.turn >= 9:
-            self.endGame("draw")
+            return self.endGame("draw")
 
     def endGame(self, winner):
         if winner == self.cross:
@@ -80,9 +81,9 @@ class TicTacToe():
         self.gameEnded = 1
 
         if winner == "draw":
-            print("It's draw!")
+            return("It's draw!")
         else:
-            print("Player{} wins!".format(winner))
+            return("Player{} wins!".format(winner))
 
     def printASCIIgame(self):
         score = '\033[34m'+"Player X    {}" + '\033[0m' + " - {} - " + '\033[31m' + "{}    Player O" + '\033[0m'
@@ -121,7 +122,7 @@ class TicTacToe():
                 if self.placeSign(input(), input()) == 0:
                     valid = True
             if self.turn > 4:
-                self.checkGame()
+                print(self.checkGame())
 
         self.retryMenu()
 
@@ -201,6 +202,3 @@ Create or join game?
         x = input()
 
         menu[x]()
-
-game = TicTacToe()
-game.menu()
