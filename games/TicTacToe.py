@@ -133,7 +133,7 @@ class TicTacToe():
 
         self.gameEnded = 0
         while not self.gameEnded:
-
+            self.clearScreen()
             self.countTurn()
             self.changePlayer()
             self.printASCIIgame()
