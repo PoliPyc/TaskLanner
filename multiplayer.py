@@ -53,6 +53,7 @@ class Multiplayer():
     def sendData(self, data):
         data = pickle.dumps(data)
         self.connection.send(data)
+        return 0
 
     def receiveData(self):
         while True:

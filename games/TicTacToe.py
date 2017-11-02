@@ -24,9 +24,9 @@ class TicTacToe():
 
         self.board[y][x] = sign
 
-    def placeSign(self, x, y):
-        x = int(x) - 1
-        y = int(y) - 1
+    def placeSign(self, coordinates):
+        x = int(coordinates[0]) - 1
+        y = int(coordinates[1]) - 1
 
         try:
             if x < 0 or x > 2 or y < 0 or y > 2:
@@ -89,7 +89,7 @@ class TicTacToe():
         score = '\033[34m'+"Player X    {}" + '\033[0m' + " - {} - " + '\033[31m' + "{}    Player O" + '\033[0m'
         columns = "            1   2   3 "
         boardRow = "         {} [{}] [{}] [{}]"
-        turns = "            Turn {}"
+        turns = "        Player {} turn /#{}"
 
         marks = [[" "]* 3 for i in range(3)]
         for x in range(3):
@@ -105,7 +105,7 @@ class TicTacToe():
         print(boardRow.format(1, marks[0][0], marks[0][1], marks[0][2]))
         print(boardRow.format(2, marks[1][0], marks[1][1], marks[1][2]))
         print(boardRow.format(3, marks[2][0], marks[2][1], marks[2][2]))
-        print(turns.format(self.turn))
+        print(turns.format(self.playerTurn, self.turn))
 
     def clearScreen(self):
         print("\033c")
@@ -119,7 +119,7 @@ class TicTacToe():
             self.printASCIIgame()
             valid = False
             while valid == False:
-                if self.placeSign(input(), input()) == 0:
+                if self.placeSign((input(), input())) == 0:
                     valid = True
             if self.turn > 4:
                 print(self.checkGame())
@@ -141,9 +141,15 @@ class TicTacToe():
             if(self.playerTurn == self.multiplayer.myID): #for now that's the player that created game
                 valid = False
                 while valid == False:
-                    if self.multiplayer.sendData((input(), input())) == 0:
+                    coordinates = (input(), input())
+                    if self.multiplayer.sendData(coordinates) == 0:
+                        self.placeSign(coordinates)
                         valid = True
-            else: self.multiplayer.receiveData()
+            else:
+                print("waiting for opponent move", end="")
+                coordinates = self.multiplayer.receiveData()
+                self.placeSign(coordinates)
+                print('\r'+"yourturn", end="")
 
             if self.turn > 4:
                 self.checkGame()
